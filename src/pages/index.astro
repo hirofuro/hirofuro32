@@ -1,0 +1,34 @@
+---
+import Layout from '../layouts/layout.astro';
+// posts内の.mdファイルを取得
+const posts = await Astro.glob('./posts/**/*.md')
+// 記事数
+const postsLength = Number(posts.length);
+// 記事の表示個数
+const parPages = 10;
+// 何ページあるか　小数切り捨て
+const postPages = postsLength / parPages | 0;
+// postPagesの切り捨てた数の記事を表示するため +1
+const totalPages = postPages + 1;
+---
+<Layout title="Indexページ">
+    <h1>Astro</h1>
+    
+    <ul>
+        {
+            posts.slice(0, 10).map(post => {
+                return <li><a href={post.url}>{post.frontmatter.title}</a></li>
+            })
+        }
+    </ul>
+        
+    <div class="pagenation">
+        <ul>
+            {
+                [...Array(totalPages)].map((post, index) => (
+                    <li><a href={`/page/${index + 1}/`}>{index + 1}</a></li>
+                ))
+            }
+        </ul>
+    </div>
+</Layout>

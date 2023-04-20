@@ -1,0 +1,11 @@
+---
+import Layout from '../layouts/layout.astro';
+const { title } = Astro.props.frontmatter;
+---
+<Layout title={title}>
+    <article class="post">
+        <slot />
+        
+        <a href="/">トップへ戻る</a>
+    </article>
+</Layout>

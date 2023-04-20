@@ -1,0 +1,60 @@
+---
+import Layout from '../../layouts/layout.astro';
+// posts内の.mdファイルを取得
+
+export async function getStaticPaths() {
+    
+    const posts = await Astro.glob('../posts/**/*.md')
+    const postsLength = Number(posts.length);
+    const parPages = 10;
+    const postsPages = postsLength / parPages | 0;
+    const totalPages = postsPages + 1;
+    
+    // 該当するパラーメータ分出力
+    //ページ数なので最大ページ数分配列を生成
+    return [...Array(totalPages)].map((param, index) => (
+        [
+            {
+                params: {page: index + 1},
+            }
+        ]
+    ))
+}
+
+const { page } = Astro.params;
+
+const posts = await Astro.glob('../posts/**/*.md')
+
+const postsLength = Number(posts.length);
+const parPages = 10;
+const postsPages = postsLength / parPages | 0;
+const totalPages = postsPages + 1;
+
+// 何記事まで表示するか 3ページなら 10 * 3
+const getPageNum = parPages * page;
+// 記事のスタート番号 3ページ目なら20から
+const startPageNum = getPageNum - parPages;
+
+---
+<Layout title={page + "ページ目"}>
+    <h1>Astro</h1>
+
+    <ul>
+        {
+            // 10記事ごと表示で、3ページ目なら20から30まで
+            posts.slice(startPageNum, getPageNum).map(post => {
+                return <li><a href={post.url}>{post.frontmatter.title}</a></li>
+            })
+        }
+    </ul>
+    
+    <div class="pagenation">
+        <ul>
+            {
+                [...Array(totalPages)].map((post, index) => (
+                    <li><a href={`/page/${index + 1}/`}>{index + 1}</a></li>
+                ))
+            }
+        </ul>
+    </div>
+</Layout>
