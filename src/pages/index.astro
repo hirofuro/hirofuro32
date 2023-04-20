@@ -3,7 +3,7 @@ import Layout from '../layouts/layout.astro';
 // posts内の.mdファイルを取得
 const posts = await Astro.glob('./posts/**/*.md')
 // 記事数
-const postsLength = Number(posts.length);
+const postsLength = posts.length;
 // 記事の表示個数
 const parPages = 10;
 // 何ページあるか　小数切り捨て
