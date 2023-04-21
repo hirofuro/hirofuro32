@@ -6,10 +6,8 @@ const posts = await Astro.glob('./posts/**/*.md')
 const postsLength = posts.length;
 // 記事の表示個数
 const parPages = 10;
-// 何ページあるか　小数切り捨て
-const postPages = postsLength / parPages | 0;
-// postPagesの切り捨てた数の記事を表示するため +1
-const totalPages = postPages + 1;
+// 何ページあるか　小数切り上げ
+const totalPages = Math.ceil(postsLength / parPages);
 ---
 <Layout title="Indexページ">
     <h1>Astro</h1>

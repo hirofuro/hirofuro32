@@ -7,8 +7,7 @@ export async function getStaticPaths() {
     const posts = await Astro.glob('../posts/**/*.md')
     const postsLength = posts.length;
     const parPages = 10;
-    const postsPages = postsLength / parPages | 0;
-    const totalPages = postsPages + 1;
+    const totalPages = Math.ceil(postsLength / parPages);
     
     // 該当するパラーメータ分出力
     //ページ数なので最大ページ数分配列を生成
