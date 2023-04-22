@@ -1,0 +1,47 @@
+---
+import Layout from '../layouts/layout.astro';
+// posts内の.mdファイルを取得
+
+export async function getStaticPaths({ paginate }: { paginate: any }) {
+    
+    const posts = await Astro.glob('./posts/**/*.md')
+    
+    return paginate(posts, { pageSize: 10 });
+}
+
+// page.data - paginate()関数に渡された、ページのスライスデータを含む配列です。
+const { page } = Astro.props;
+
+
+---
+<Layout title={"タイトル"}>
+    <h1>Astro</h1>
+
+    <ul>
+        {
+            // 10記事ごと表示で、3ページ目なら20から30まで
+            page.data.map(post => {
+                return <li><a href={post.url}>{post.frontmatter.title}</a></li>
+            })
+        }
+    </ul>
+    
+    <div class="pagenation">
+        <ul>
+            {
+                [...Array(page.lastPage)].map((item, index) => {
+
+                    return (
+                        <li>
+                            <a 
+                                href={`/${index + 1 === 1 ? '' : index + 1}`} 
+                                class={ page.currentPage === index + 1 ? "current" : "" }>
+                                {index + 1}
+                            </a>
+                        </li>
+                    );
+                })
+            }
+        </ul>
+    </div>
+</Layout>
